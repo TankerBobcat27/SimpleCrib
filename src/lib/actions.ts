@@ -33,6 +33,34 @@ function readDate(formData: FormData, key: string) {
   return value || null;
 }
 
+function safeNextPath(value: string) {
+  if (value.startsWith("/") && !value.startsWith("//")) {
+    return value;
+  }
+  return "/app";
+}
+
+export async function signInAction(formData: FormData) {
+  await ensureSchema();
+  const email = readString(formData, "email").toLowerCase();
+  const password = readString(formData, "password");
+  const next = safeNextPath(readString(formData, "next"));
+  if (!email || !password) {
+    redirect(`/login?error=auth&next=${encodeURIComponent(next)}`);
+  }
+
+  try {
+    await auth.api.signInEmail({
+      headers: await headers(),
+      body: { email, password },
+    });
+  } catch {
+    redirect(`/login?error=auth&next=${encodeURIComponent(next)}`);
+  }
+
+  redirect(next);
+}
+
 export async function createShopAction(formData: FormData) {
   await ensureSchema();
   const shopName = readString(formData, "shopName");
