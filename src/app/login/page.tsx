@@ -16,8 +16,9 @@ export default async function LoginPage({
         </Link>
         <h1 className="mt-2 text-3xl font-semibold">Log in</h1>
         <p className="mt-2 text-sm text-zinc-400">
-          Demo shop uses SAMPLE gages only. Email <span className="text-zinc-200">admin@demo.shopcal.test</span>{" "}
-          / password <span className="text-zinc-200">DemoAdmin!2026</span>
+          Demo shop: SAMPLE gages and tools. Email{" "}
+          <span className="text-zinc-200">admin@demo.shopcal.test</span> / password{" "}
+          <span className="text-zinc-200">DemoAdmin!2026</span>
         </p>
       </div>
       {params.error ? (

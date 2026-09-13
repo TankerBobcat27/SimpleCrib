@@ -5,18 +5,21 @@
 export const brand = {
   productName: "SimpleCrib",
   productLine: "Calibration",
+  toolcribLine: "Toolcrib",
   shortLine: "Shop Apps",
   domain: "simplecrib.com",
 } as const;
 
-export function productMark() {
-  return `${brand.productName} · ${brand.productLine}`;
+export type ProductLine = typeof brand.productLine | typeof brand.toolcribLine;
+
+export function productMark(line: ProductLine = brand.productLine) {
+  return `${brand.productName} · ${line}`;
 }
 
-export function productTitle() {
-  return `${brand.productName} ${brand.productLine}`;
+export function productTitle(line: ProductLine = brand.productLine) {
+  return `${brand.productName} ${line}`;
 }
 
-export function productLineTitle() {
-  return `${brand.productLine} Tracker`;
+export function productLineTitle(line: ProductLine = brand.productLine) {
+  return line === brand.toolcribLine ? "Toolcrib" : `${line} Tracker`;
 }

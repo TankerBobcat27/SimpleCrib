@@ -2,10 +2,8 @@ import "dotenv/config";
 import { eq } from "drizzle-orm";
 import { auth } from "../src/lib/auth";
 import { db, ensureSchema, client } from "../src/lib/db";
-import { calHistory, gages, tenants } from "../src/lib/db/schema";
-
-const DEMO_TENANT_ID = "ten_demo_midwest_precision";
-const DEMO_SLUG = "demo";
+import { DEMO_SLUG, DEMO_TENANT_ID, SAMPLE_TOOLS } from "../src/lib/demo-inventory";
+import { calHistory, gages, tenants, toolLocations, tools } from "../src/lib/db/schema";
 
 const DEMO_USERS = [
   {
@@ -323,6 +321,34 @@ async function main() {
     console.log(`Seeded ${SAMPLE_GAGES.length} SAMPLE gages`);
   } else {
     console.log(`Demo tenant already has ${existingGages.length} gages`);
+  }
+
+  const existingTools = await db.select().from(tools).where(eq(tools.tenantId, DEMO_TENANT_ID));
+  if (existingTools.length === 0) {
+    for (const [index, tool] of SAMPLE_TOOLS.entries()) {
+      const toolId = `tool_demo_${String(index + 1).padStart(2, "0")}`;
+      await db.insert(tools).values({
+        id: toolId,
+        tenantId: DEMO_TENANT_ID,
+        toolNumber: tool.toolNumber,
+        name: tool.name,
+        type: tool.type,
+        manufacturer: tool.manufacturer,
+        notes: tool.notes,
+      });
+      for (const [locIndex, loc] of tool.locations.entries()) {
+        await db.insert(toolLocations).values({
+          id: `tloc_demo_${String(index + 1).padStart(2, "0")}_${locIndex + 1}`,
+          tenantId: DEMO_TENANT_ID,
+          toolId,
+          location: loc.name,
+          quantity: loc.qty,
+        });
+      }
+    }
+    console.log(`Seeded ${SAMPLE_TOOLS.length} SAMPLE tools`);
+  } else {
+    console.log(`Demo tenant already has ${existingTools.length} tools`);
   }
 
   console.log("Demo login: admin@demo.shopcal.test / DemoAdmin!2026");

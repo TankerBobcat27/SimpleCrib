@@ -10,4 +10,4 @@ RUN npm run build
 
 ENV NODE_ENV=production
 EXPOSE 8080
-CMD ["sh", "-c", "npx tsx scripts/migrate.ts && npx tsx scripts/seed.ts && npm run start"]
+CMD ["npm", "run", "start"]

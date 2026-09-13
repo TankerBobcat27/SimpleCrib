@@ -1,4 +1,4 @@
-import { boolean, date, index, pgTable, text, timestamp, unique } from "drizzle-orm/pg-core";
+import { boolean, date, index, integer, pgTable, text, timestamp, unique } from "drizzle-orm/pg-core";
 
 export const tenants = pgTable("tenants", {
   id: text("id").primaryKey(),
@@ -113,7 +113,73 @@ export const calHistory = pgTable(
   (table) => [index("cal_history_tenant_gage_idx").on(table.tenantId, table.gageId)],
 );
 
+export const tools = pgTable(
+  "tools",
+  {
+    id: text("id").primaryKey(),
+    tenantId: text("tenant_id")
+      .notNull()
+      .references(() => tenants.id, { onDelete: "cascade" }),
+    toolNumber: text("tool_number").notNull(),
+    name: text("name").notNull(),
+    type: text("type").notNull(),
+    manufacturer: text("manufacturer"),
+    notes: text("notes"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    unique("tools_tenant_number").on(table.tenantId, table.toolNumber),
+    index("tools_tenant_type_idx").on(table.tenantId, table.type),
+  ],
+);
+
+export const toolLocations = pgTable(
+  "tool_locations",
+  {
+    id: text("id").primaryKey(),
+    tenantId: text("tenant_id")
+      .notNull()
+      .references(() => tenants.id, { onDelete: "cascade" }),
+    toolId: text("tool_id")
+      .notNull()
+      .references(() => tools.id, { onDelete: "cascade" }),
+    location: text("location").notNull(),
+    quantity: integer("quantity").notNull().default(0),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    unique("tool_locations_tenant_tool_loc").on(table.tenantId, table.toolId, table.location),
+    index("tool_locations_tenant_tool_idx").on(table.tenantId, table.toolId),
+    index("tool_locations_tenant_loc_idx").on(table.tenantId, table.location),
+  ],
+);
+
+export const toolMoves = pgTable(
+  "tool_moves",
+  {
+    id: text("id").primaryKey(),
+    tenantId: text("tenant_id")
+      .notNull()
+      .references(() => tenants.id, { onDelete: "cascade" }),
+    toolId: text("tool_id")
+      .notNull()
+      .references(() => tools.id, { onDelete: "cascade" }),
+    intent: text("intent").notNull(),
+    fromLocation: text("from_location").notNull(),
+    toLocation: text("to_location").notNull(),
+    quantity: integer("quantity").notNull(),
+    performedBy: text("performed_by"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [index("tool_moves_tenant_tool_idx").on(table.tenantId, table.toolId)],
+);
+
 export type Tenant = typeof tenants.$inferSelect;
 export type User = typeof user.$inferSelect;
 export type Gage = typeof gages.$inferSelect;
 export type CalHistory = typeof calHistory.$inferSelect;
+export type Tool = typeof tools.$inferSelect;
+export type ToolLocation = typeof toolLocations.$inferSelect;
+export type ToolMove = typeof toolMoves.$inferSelect;
