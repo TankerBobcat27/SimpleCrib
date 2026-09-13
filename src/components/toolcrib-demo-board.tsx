@@ -243,13 +243,54 @@ export function ToolcribDemoBoard() {
         <span className="text-zinc-100">{tools.length}</span> SAMPLE tools
       </p>
 
+      {checkoutTool ? (
+        <div
+          role="region"
+          aria-labelledby="checkout-title"
+          className="rounded-2xl border border-amber-400/50 bg-zinc-900 p-5"
+        >
+          <p className="text-xs uppercase tracking-[0.18em] text-amber-300/80">DEMO · SAMPLE checkout</p>
+          <h2 id="checkout-title" className="mt-2 text-xl font-semibold text-zinc-50">
+            Check out {checkoutTool.name}
+          </h2>
+          <p className="mt-2 text-sm text-zinc-400">
+            Preview only. Pick a crib or machine location. Nothing is written to a real shop.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {checkoutTool.locations.map((loc) => (
+              <Button
+                key={loc.name}
+                type="button"
+                size="sm"
+                onClick={() => checkout(checkoutTool.sku, loc.name)}
+              >
+                {loc.name} ({loc.qty})
+              </Button>
+            ))}
+          </div>
+          <div className="mt-4">
+            <Button type="button" variant="secondary" size="sm" onClick={() => setCheckoutSku(null)}>
+              Cancel
+            </Button>
+          </div>
+        </div>
+      ) : null}
+
       <div className="grid gap-3 md:hidden">
         {visible.map((tool) => (
           <article key={tool.sku} className="rounded-xl border border-zinc-800 bg-zinc-900 p-4">
             <ToolRowHeader tool={tool} />
             <LocationChips locations={tool.locations} />
             <div className="mt-4">
-              <Button size="sm" onClick={() => setCheckoutSku(tool.sku)} disabled={onHand(tool) === 0}>
+              <Button
+                type="button"
+                size="sm"
+                onClick={() => {
+                  setNotice(null);
+                  setCheckoutSku(tool.sku);
+                }}
+                disabled={onHand(tool) === 0}
+              >
                 Check out
               </Button>
             </div>
@@ -287,7 +328,15 @@ export function ToolcribDemoBoard() {
                   <StatusBadge tool={tool} />
                 </td>
                 <td className="px-4 py-3">
-                  <Button size="sm" onClick={() => setCheckoutSku(tool.sku)} disabled={onHand(tool) === 0}>
+                  <Button
+                    type="button"
+                    size="sm"
+                    onClick={() => {
+                      setNotice(null);
+                      setCheckoutSku(tool.sku);
+                    }}
+                    disabled={onHand(tool) === 0}
+                  >
                     Check out
                   </Button>
                 </td>
@@ -300,36 +349,6 @@ export function ToolcribDemoBoard() {
       {visible.length === 0 ? (
         <div className="rounded-xl border border-dashed border-zinc-700 bg-zinc-900/40 px-6 py-12 text-center text-sm text-zinc-400">
           No SAMPLE tools match this search. Clear the query or pick All locations.
-        </div>
-      ) : null}
-
-      {checkoutTool ? (
-        <div className="fixed inset-0 z-40 grid place-items-end bg-black/60 p-4 sm:place-items-center">
-          <div
-            role="dialog"
-            aria-labelledby="checkout-title"
-            className="w-full max-w-md rounded-2xl border border-zinc-700 bg-zinc-950 p-5 shadow-2xl"
-          >
-            <p className="text-xs uppercase tracking-[0.18em] text-amber-300/80">DEMO · SAMPLE</p>
-            <h2 id="checkout-title" className="mt-2 text-xl font-semibold text-zinc-50">
-              Check out {checkoutTool.name}
-            </h2>
-            <p className="mt-2 text-sm text-zinc-400">
-              Preview only. Pick a crib or machine location. Nothing is written to a real shop.
-            </p>
-            <div className="mt-4 flex flex-wrap gap-2">
-              {checkoutTool.locations.map((loc) => (
-                <Button key={loc.name} size="sm" onClick={() => checkout(checkoutTool.sku, loc.name)}>
-                  {loc.name} ({loc.qty})
-                </Button>
-              ))}
-            </div>
-            <div className="mt-4">
-              <Button variant="secondary" size="sm" onClick={() => setCheckoutSku(null)}>
-                Cancel
-              </Button>
-            </div>
-          </div>
         </div>
       ) : null}
     </div>
