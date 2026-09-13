@@ -3,6 +3,8 @@ import { BackupBanner } from "@/components/backup-banner";
 import { ShopHeader } from "@/components/shop-header";
 import { requireShop } from "@/lib/tenant";
 
+export const dynamic = 'force-dynamic';
+
 export default async function TenantLayout({
   children,
   params,

@@ -5,6 +5,8 @@ import { Input } from "@/components/ui/input";
 import { gageCounts, GAGE_TYPES, listGages, listLocations, type DueFilter } from "@/lib/gages";
 import { requireShop } from "@/lib/tenant";
 
+export const dynamic = 'force-dynamic';
+
 export default async function InventoryPage({
   params,
   searchParams,

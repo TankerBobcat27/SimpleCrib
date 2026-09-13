@@ -5,6 +5,8 @@ import { canSeeDueWeekInbox } from "@/lib/roles";
 import { requireShop } from "@/lib/tenant";
 import { redirect } from "next/navigation";
 
+export const dynamic = 'force-dynamic';
+
 export default async function DueWeekPage({
   params,
 }: {

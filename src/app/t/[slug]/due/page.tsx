@@ -3,6 +3,8 @@ import { GageBoard } from "@/components/gage-board";
 import { gageCounts, listGages, type DueFilter } from "@/lib/gages";
 import { requireShop } from "@/lib/tenant";
 
+export const dynamic = 'force-dynamic';
+
 export default async function DueBoardPage({
   params,
   searchParams,

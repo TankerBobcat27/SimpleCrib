@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { brand, productLineTitle } from "@/lib/brand";
 import { getSessionUser } from "@/lib/tenant";
 
+export const dynamic = 'force-dynamic';
+
 export default async function HomePage() {
   let user: Awaited<ReturnType<typeof getSessionUser>> = null;
   try {

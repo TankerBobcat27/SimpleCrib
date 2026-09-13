@@ -6,6 +6,8 @@ import { getGage, listGageHistory } from "@/lib/gages";
 import { canEditGages } from "@/lib/roles";
 import { requireShop } from "@/lib/tenant";
 
+export const dynamic = 'force-dynamic';
+
 export default async function GageDetailPage({
   params,
 }: {
