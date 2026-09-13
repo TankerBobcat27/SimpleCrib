@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { requireShop } from "@/lib/tenant";
 import {
-  knownDestinations,
   listToolLocations,
   listTools,
   moveErrorMessage,
@@ -29,11 +28,9 @@ export default async function ToolcribPage({
     listToolLocations(shop.tenantId),
   ]);
   const counts = toolCounts(items);
-  const destinations = knownDestinations(tenantLocations);
   const highlighted = items.find((tool) => tool.id === query.id);
   const ok = moveOkMessage(query.ok, highlighted?.toolNumber);
   const error = moveErrorMessage(query.error);
-  const returnTo = `/t/${slug}/toolcrib`;
 
   return (
     <div className="grid gap-5">
@@ -92,7 +89,7 @@ export default async function ToolcribPage({
         <span className="text-zinc-100">{counts.onFloor}</span> with stock on the floor
       </p>
 
-      <ToolBoard slug={slug} tools={items} destinations={destinations} role={shop.role} returnTo={returnTo} />
+      <ToolBoard slug={slug} tools={items} role={shop.role} />
     </div>
   );
 }

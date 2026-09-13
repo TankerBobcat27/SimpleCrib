@@ -1,28 +1,21 @@
-"use client";
-
-import { useState } from "react";
 import Link from "next/link";
 import { LocationChips } from "@/components/location-chips";
-import { ToolMoveForm } from "@/components/tool-move-form";
 import { Button } from "@/components/ui/button";
 import type { Role } from "@/lib/roles";
 import { canMoveTools } from "@/lib/roles";
-import type { MoveIntent, ToolCard } from "@/lib/tool-core";
+import type { ToolCard } from "@/lib/tool-core";
 
 export function ToolBoard({
   slug,
   tools,
-  destinations,
   role,
-  returnTo,
 }: {
   slug: string;
   tools: ToolCard[];
-  destinations: string[];
+  destinations?: string[];
   role: Role;
-  returnTo: string;
+  returnTo?: string;
 }) {
-  const [open, setOpen] = useState<{ id: string; intent: MoveIntent } | null>(null);
   const canMove = canMoveTools(role);
 
   if (tools.length === 0) {
@@ -34,57 +27,14 @@ export function ToolBoard({
     );
   }
 
-  const openTool = open ? tools.find((tool) => tool.id === open.id) : null;
-
   return (
     <>
-      {openTool && open ? (
-        <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-zinc-950/80 p-4 pt-16">
-          <div
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="tool-move-title"
-            className="w-full max-w-2xl rounded-2xl border border-amber-400/50 bg-zinc-900 p-5 shadow-2xl"
-          >
-            <div className="grid gap-3">
-              <div>
-                <p className="text-xs uppercase tracking-[0.18em] text-amber-300/80">
-                  {open.intent === "checkin" ? "Return / check in" : "Check out"}
-                </p>
-                <h2 id="tool-move-title" className="mt-1 text-xl font-semibold">
-                  {openTool.toolNumber} · {openTool.name}
-                </h2>
-                <p className="mt-1 text-sm text-zinc-400">
-                  {open.intent === "checkin"
-                    ? "Move quantity from a floor location back to the crib (or another location)."
-                    : "Enter how many to take and where they are going. Source quantity drops; destination chip is created or updated."}
-                </p>
-              </div>
-              <LocationChips locations={openTool.locations} />
-              <ToolMoveForm
-                slug={slug}
-                toolId={openTool.id}
-                locations={openTool.locations}
-                destinations={destinations}
-                intent={open.intent}
-                returnTo={returnTo}
-              />
-              <div>
-                <Button type="button" variant="secondary" size="sm" onClick={() => setOpen(null)}>
-                  Cancel
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      ) : null}
-
       <div className="grid gap-3 md:hidden">
         {tools.map((tool) => (
           <article key={tool.id} className="rounded-xl border border-zinc-800 bg-zinc-900 p-4">
             <ToolHeader slug={slug} tool={tool} />
             <LocationChips locations={tool.locations} className="mt-3" />
-            {canMove ? <MoveActions tool={tool} setOpen={setOpen} /> : null}
+            {canMove ? <MoveActions slug={slug} tool={tool} /> : null}
           </article>
         ))}
       </div>
@@ -118,7 +68,7 @@ export function ToolBoard({
                 </td>
                 <td className="px-4 py-3">
                   {canMove ? (
-                    <MoveActions tool={tool} setOpen={setOpen} compact />
+                    <MoveActions slug={slug} tool={tool} compact />
                   ) : (
                     <Button asChild size="sm" variant="secondary">
                       <Link href={`/t/${slug}/toolcrib/${tool.id}`}>Open</Link>
@@ -130,7 +80,6 @@ export function ToolBoard({
           </tbody>
         </table>
       </div>
-
     </>
   );
 }
@@ -152,35 +101,30 @@ function ToolHeader({ slug, tool }: { slug: string; tool: ToolCard }) {
 }
 
 function MoveActions({
+  slug,
   tool,
-  setOpen,
   compact,
 }: {
+  slug: string;
   tool: ToolCard;
-  setOpen: (value: { id: string; intent: MoveIntent } | null) => void;
   compact?: boolean;
 }) {
   const hasFloor = tool.locations.some((loc) => !/^crib\b/i.test(loc.name) && loc.qty > 0);
 
   return (
     <div className={compact ? "flex flex-wrap gap-2" : "mt-4 flex flex-wrap gap-2"}>
-      <Button
-        type="button"
-        size="sm"
-        disabled={tool.totalQty === 0}
-        onClick={() => setOpen({ id: tool.id, intent: "checkout" })}
-      >
-        Check out
+      <Button asChild size="sm">
+        <Link href={`/t/${slug}/toolcrib/${tool.id}?move=checkout#checkout`}>Check out</Link>
       </Button>
-      <Button
-        type="button"
-        size="sm"
-        variant="secondary"
-        disabled={!hasFloor}
-        onClick={() => setOpen({ id: tool.id, intent: "checkin" })}
-      >
-        Return
-      </Button>
+      {hasFloor ? (
+        <Button asChild size="sm" variant="secondary">
+          <Link href={`/t/${slug}/toolcrib/${tool.id}?move=checkin#checkin`}>Return</Link>
+        </Button>
+      ) : (
+        <Button size="sm" variant="secondary" disabled>
+          Return
+        </Button>
+      )}
     </div>
   );
 }

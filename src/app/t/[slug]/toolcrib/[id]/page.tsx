@@ -22,7 +22,7 @@ export default async function ToolDetailPage({
   searchParams,
 }: {
   params: Promise<{ slug: string; id: string }>;
-  searchParams: Promise<{ ok?: string; error?: string }>;
+  searchParams: Promise<{ ok?: string; error?: string; move?: string }>;
 }) {
   const { slug, id } = await params;
   const query = await searchParams;
@@ -72,7 +72,14 @@ export default async function ToolDetailPage({
 
       {canMove ? (
         <div className="grid gap-4 lg:grid-cols-2">
-          <section className="rounded-xl border border-zinc-800 bg-zinc-900/70 p-5">
+          <section
+            id="checkout"
+            className={
+              query.move === "checkout"
+                ? "rounded-xl border border-amber-400/60 bg-zinc-900/70 p-5"
+                : "rounded-xl border border-zinc-800 bg-zinc-900/70 p-5"
+            }
+          >
             <h3 className="text-sm font-semibold uppercase tracking-wide text-zinc-400">Check out</h3>
             <p className="mt-2 mb-4 text-sm text-zinc-400">
               Take some (or all) from a location chip and send them to a workstation or machine.
@@ -86,7 +93,14 @@ export default async function ToolDetailPage({
               returnTo={returnTo}
             />
           </section>
-          <section className="rounded-xl border border-zinc-800 bg-zinc-900/70 p-5">
+          <section
+            id="checkin"
+            className={
+              query.move === "checkin"
+                ? "rounded-xl border border-amber-400/60 bg-zinc-900/70 p-5"
+                : "rounded-xl border border-zinc-800 bg-zinc-900/70 p-5"
+            }
+          >
             <h3 className="text-sm font-semibold uppercase tracking-wide text-zinc-400">Return / check in</h3>
             <p className="mt-2 mb-4 text-sm text-zinc-400">
               Bring quantity back from the floor to Crib A — or any other location.
