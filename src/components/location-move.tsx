@@ -6,21 +6,26 @@ import { moveGageLocationAction } from "@/lib/actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-const ADD_NEW = "__new__";
-
 const selectClass =
   "flex h-9 w-full min-w-[10.5rem] rounded-md border border-zinc-700 bg-zinc-950 px-2 text-sm text-zinc-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/70 disabled:cursor-not-allowed disabled:opacity-60";
 
-function MoveSelect({
+function MoveSubmit({ label }: { label: string }) {
+  const { pending } = useFormStatus();
+  return (
+    <Button type="submit" size="sm" disabled={pending}>
+      {pending ? "Moving…" : label}
+    </Button>
+  );
+}
+
+function LocationSelect({
   id,
   location,
   locations,
-  onAdd,
 }: {
   id: string;
   location: string;
   locations: string[];
-  onAdd: () => void;
 }) {
   const { pending } = useFormStatus();
   const options = locations.includes(location) ? locations : [location, ...locations];
@@ -32,22 +37,13 @@ function MoveSelect({
       defaultValue={location}
       className={selectClass}
       disabled={pending}
-      aria-label="Move location"
-      onChange={(event) => {
-        if (event.target.value === ADD_NEW) {
-          event.target.value = location;
-          onAdd();
-          return;
-        }
-        event.currentTarget.form?.requestSubmit();
-      }}
+      aria-label="Shop location"
     >
       {options.filter(Boolean).map((name) => (
         <option key={name} value={name}>
           {name}
         </option>
       ))}
-      <option value={ADD_NEW}>+ Add location…</option>
     </select>
   );
 }
@@ -65,11 +61,7 @@ function AddFields() {
         disabled={pending}
         aria-label="New shop location"
       />
-      <div className="flex flex-wrap gap-2">
-        <Button type="submit" size="sm" disabled={pending}>
-          {pending ? "Moving…" : "Add & move"}
-        </Button>
-      </div>
+      <MoveSubmit label="Add & move" />
     </div>
   );
 }
@@ -95,24 +87,32 @@ export function LocationMove({
     <p className="text-sm text-zinc-300">{location}</p>
   ) : (
     <div className="grid gap-2">
-      <form action={moveGageLocationAction} className="grid gap-1.5">
-        <input type="hidden" name="slug" value={slug} />
-        <input type="hidden" name="id" value={id} />
-        <label htmlFor={`move-loc-${id}`} className="text-xs font-medium uppercase tracking-wide text-zinc-500">
-          Move location
-        </label>
-        <MoveSelect id={id} location={location} locations={locations} onAdd={() => setAdding(true)} />
-      </form>
       {adding ? (
         <form action={moveGageLocationAction} className="grid gap-1.5">
           <input type="hidden" name="slug" value={slug} />
           <input type="hidden" name="id" value={id} />
+          <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">Add location</p>
           <AddFields />
           <Button type="button" size="sm" variant="ghost" onClick={() => setAdding(false)}>
             Cancel
           </Button>
         </form>
-      ) : null}
+      ) : (
+        <form action={moveGageLocationAction} className="grid gap-1.5">
+          <input type="hidden" name="slug" value={slug} />
+          <input type="hidden" name="id" value={id} />
+          <label htmlFor={`move-loc-${id}`} className="text-xs font-medium uppercase tracking-wide text-zinc-500">
+            Move location
+          </label>
+          <div className={layout === "panel" ? "grid gap-2" : "flex flex-wrap items-center gap-2"}>
+            <LocationSelect id={id} location={location} locations={locations} />
+            <MoveSubmit label={layout === "panel" ? "Check out / in" : "Move"} />
+            <Button type="button" size="sm" variant="secondary" onClick={() => setAdding(true)}>
+              Add location
+            </Button>
+          </div>
+        </form>
+      )}
     </div>
   );
 
