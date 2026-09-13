@@ -1,12 +1,12 @@
 /**
- * Working product title — not a locked brand.
- * Rename here only; UI should not hardcode a company/product name.
- * Do not buy a domain from this string.
+ * Locked product brand. Domain: simplecrib.com (registered).
+ * UI copy should keep using brand.productName so strings stay consistent.
  */
 export const brand = {
   productName: "SimpleCrib",
   productLine: "Calibration",
   shortLine: "Shop Apps",
+  domain: "simplecrib.com",
 } as const;
 
 export function productMark() {

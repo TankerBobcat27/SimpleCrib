@@ -1,6 +1,6 @@
 # Deploy on Railway
 
-One Next.js web service plus a Postgres service. Do **not** attach this to the existing `layke-qms-documents` project. The customer-facing name lives in `src/lib/brand.ts` and is a working title only.
+One Next.js web service plus a Postgres service. Do **not** attach this to the existing `layke-qms-documents` project. The customer-facing name is SimpleCrib (`src/lib/brand.ts`). Domain: simplecrib.com.
 
 ## One-time project setup
 
