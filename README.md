@@ -1,4 +1,6 @@
-# ShopCal — Calibration Tracker (Week 1)
+# SimpleCrib — Calibration Tracker (Week 1)
+
+Working title only — not a locked brand. Change `src/lib/brand.ts` (`brand.productName`) to rename the UI. Do not buy a domain from this name.
 
 Multi-tenant gage / cal due board for US machine shops (1–40 people). One shared Next.js app + Postgres. Every query is scoped by `tenant_id`.
 

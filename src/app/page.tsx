@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { BackupBanner } from "@/components/backup-banner";
 import { Button } from "@/components/ui/button";
+import { brand, productLineTitle } from "@/lib/brand";
 import { getSessionUser } from "@/lib/tenant";
 
 export default async function HomePage() {
@@ -15,8 +16,8 @@ export default async function HomePage() {
     <div className="min-h-full bg-[radial-gradient(circle_at_top,_rgba(251,191,36,0.08),_transparent_28%),linear-gradient(#09090b,#09090b)]">
       <header className="mx-auto flex max-w-5xl items-center justify-between px-4 py-5">
         <div>
-          <p className="text-xs uppercase tracking-[0.2em] text-amber-300/80">ShopCal</p>
-          <p className="text-lg font-semibold">Calibration Tracker</p>
+          <p className="text-xs uppercase tracking-[0.2em] text-amber-300/80">{brand.productName}</p>
+          <p className="text-lg font-semibold">{productLineTitle()}</p>
         </div>
         <div className="flex gap-2">
           {user ? (
@@ -61,7 +62,7 @@ export default async function HomePage() {
 
         <section className="grid gap-4 md:grid-cols-3">
           <PriceCard
-            name="Calibration"
+            name={brand.productLine}
             price="$39"
             detail="Due board, history, CSV, daily backups."
           />

@@ -1,4 +1,4 @@
-# ShopCal backups (Week 1)
+# Backups (Week 1)
 
 Customer-facing copy in the app:
 
@@ -11,7 +11,7 @@ Customer-facing copy in the app:
 | Railway volume backups | Entire Postgres data directory | Volume `postgres-data` on service `Postgres` in project `shopcal` |
 | CSV export | Tenant-scoped gage list | In-app **CSV** screen or `GET /api/export?slug=demo` |
 
-This is **not** a Layke here.now Site Data backup. ShopCal is a separate multi-tenant app.
+This is **not** a Layke here.now Site Data backup. This app is a separate multi-tenant product (working UI title in `src/lib/brand.ts`).
 
 ## Railway plan / storage baseline (Week 1)
 

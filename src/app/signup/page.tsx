@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { createShopAction } from "@/lib/actions";
+import { brand } from "@/lib/brand";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,7 +14,7 @@ export default async function SignupPage({
   return (
     <main className="mx-auto flex min-h-full max-w-md flex-col justify-center gap-6 px-4 py-16">
       <div>
-        <p className="text-xs uppercase tracking-[0.2em] text-amber-300/80">ShopCal</p>
+        <p className="text-xs uppercase tracking-[0.2em] text-amber-300/80">{brand.productName}</p>
         <h1 className="mt-2 text-3xl font-semibold">Start a shop</h1>
         <p className="mt-2 text-sm text-zinc-400">
           Creates a new tenant and an admin user. Toolcrib is not part of Week 1.

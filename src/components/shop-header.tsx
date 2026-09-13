@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import { auth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
+import { productLineTitle, productMark } from "@/lib/brand";
 import type { Role } from "@/lib/roles";
 import { canEditGages, canImportExport, canSeeDueWeekInbox } from "@/lib/roles";
 import { headers } from "next/headers";
@@ -31,8 +32,8 @@ export function ShopHeader({
       <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <p className="text-xs uppercase tracking-[0.18em] text-zinc-500">ShopCal · Calibration</p>
-            <h1 className="text-2xl font-semibold tracking-tight text-zinc-50">Calibration Tracker</h1>
+            <p className="text-xs uppercase tracking-[0.18em] text-zinc-500">{productMark()}</p>
+            <h1 className="text-2xl font-semibold tracking-tight text-zinc-50">{productLineTitle()}</h1>
             <p className="text-sm text-zinc-400">
               {shopName} · signed in as {userName} ({role})
             </p>

@@ -1,6 +1,6 @@
-# Deploy ShopCal on Railway
+# Deploy on Railway
 
-ShopCal is a single Next.js web service plus a Postgres service. Do **not** attach this to the existing `layke-qms-documents` project.
+One Next.js web service plus a Postgres service. Do **not** attach this to the existing `layke-qms-documents` project. The customer-facing name lives in `src/lib/brand.ts` and is a working title only.
 
 ## One-time project setup
 
