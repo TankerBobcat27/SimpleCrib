@@ -20,7 +20,7 @@ Tenant path: `/t/demo` · shop name: **Midwest Precision (Demo)**
 
 Local URL: http://127.0.0.1:43147
 
-Railway URL: see **Demo URL** at the bottom of this file after deploy. If it still says *not live*, the app runs locally and Railway services exist but the web image has not been published yet.
+Reserved Railway domain (web not deployed yet): https://web-production-a0981.up.railway.app
 
 ## Stack
 
@@ -59,5 +59,6 @@ Daily Railway volume backups on the Postgres volume. Details, plan/storage basel
 
 ## Demo URL
 
-- Local: http://127.0.0.1:43147
-- Railway: *not live yet — project `shopcal` + Postgres created; web deploy blocked until `railway up` or a GitHub source is connected. See docs/RAILWAY.md.*
+- **Working now:** http://127.0.0.1:43147 (this environment)
+- **Railway host:** project `shopcal` in workspace tankerbobcat27 — Postgres is up (5 GB volume, Daily backups on), SAMPLE demo tenant seeded. Reserved domain: https://web-production-a0981.up.railway.app
+- **Web deploy blocked:** Origin git is not GitHub, so Railway cannot auto-build from the repo. Railway CLI is installed here but not logged in (`railway login --browserless` then `railway up --service web`). Dockerfile + `railway.toml` are in the repo.

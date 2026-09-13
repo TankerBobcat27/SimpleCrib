@@ -45,21 +45,11 @@ If the Backups tab is missing, the volume is not attached. Re-attach `postgres-d
 
 **Daily schedule:** Enabled 2026-09-13 on volume `postgres-data` (5 GB) via Railway agent (`updateVolume` + commit). Official docs: Daily kept 6 days.
 
-**Restore drill:** A full click-restore (Backups → Restore → staged volume → Deploy) was **not executed** in this session because:
+**Logical restore drill (done 2026-09-13):** Railway Postgres accepted a TCP dump. Inserted canary `SHOP-RESTORE-DRILL` (19 rows), `\copy` CSV offsite, deleted canary (back to 18 SAMPLE gages), reloaded the CSV into a local scratch table (`19` rows including the canary). **Pass.** This is a logical dump/restore, not a volume snapshot restore.
 
-- Restoring overwrites the live volume mount and requires a human confirm on the project canvas.
-- There is no isolated `staging` environment yet (only `production` exists).
-- Creating a backup via API/CLI was not available without the Railway CLI being logged in on this machine.
+**Volume snapshot restore:** Not executed. Railway MCP has no backup-restore click path, CLI was not logged in on this machine, and restoring overwrites the live volume. Next: dashboard → Postgres → Backups → Restore into a `staging` environment.
 
-**What to do on first staging env (Week 1 leftover):**
-
-1. Duplicate the project environment as `staging` or take a **manual backup** of `postgres-data`.
-2. Insert a canary row in staging (`SHOP-RESTORE-DRILL`).
-3. Restore the backup from *before* the canary.
-4. Confirm the canary is gone and SAMPLE demo gages remain.
-5. Record the backup timestamp and who ran the drill here.
-
-Until that drill is run, treat CSV export as the shop-owned recovery path and Railway Daily as the host-owned path.
+Until a snapshot restore is run, treat CSV export as the shop-owned recovery path and Railway Daily + this logical drill as the host-owned path.
 
 ## Offsite option (optional)
 
