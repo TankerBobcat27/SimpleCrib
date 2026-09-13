@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: productMark(),
-  description: `${productTitle()} due board for US machine shops. Faster than Excel and the clipboard, with daily hosted backups. Not ERP, ProShop, CRIBWISE, or eQMS.`,
+  description: `${productTitle()} due board for small US machine shops. Faster than Excel and the clipboard, with daily hosted backups. Built for small shops.`,
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

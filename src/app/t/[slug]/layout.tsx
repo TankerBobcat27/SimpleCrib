@@ -22,8 +22,8 @@ export default async function TenantLayout({
         <BackupBanner />
         {children}
         <p className="pb-8 text-xs text-zinc-500">
-          Operational tracker only. Does not replace a shop QMS, official certificates, ProShop, CRIBWISE, or
-          eQMS. Demo data is SAMPLE inventory — not a live customer crib.
+          Built for small shops. Operational tracker only. Demo data is SAMPLE inventory — not a live
+          customer crib.
         </p>
       </div>
     </div>

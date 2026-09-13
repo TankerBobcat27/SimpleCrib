@@ -29,6 +29,9 @@ export default async function HomePage() {
           ) : (
             <>
               <Button asChild variant="secondary">
+                <Link href="/toolcrib-demo">See Toolcrib demo</Link>
+              </Button>
+              <Button asChild variant="secondary">
                 <Link href="/login">Log in</Link>
               </Button>
               <Button asChild>
@@ -47,12 +50,15 @@ export default async function HomePage() {
               Know what is due before the auditor does.
             </h1>
             <p className="max-w-xl text-lg text-zinc-400">
-              A hosted gage / cal due board that is faster than Excel and the clipboard, with daily backups
-              and a CSV you can take with you. Not ERP. Not ProShop. Not CRIBWISE. Not eQMS.
+              Built for small shops. A hosted gage / cal due board that is faster than Excel and the
+              clipboard, with daily backups and a CSV you can take with you.
             </p>
             <div className="flex flex-wrap gap-3">
               <Button asChild size="lg">
                 <Link href="/login">Open demo shop</Link>
+              </Button>
+              <Button asChild size="lg" variant="secondary">
+                <Link href="/toolcrib-demo">See Toolcrib demo</Link>
               </Button>
               <Button asChild size="lg" variant="secondary">
                 <Link href="/signup">Subscribe</Link>
@@ -71,7 +77,9 @@ export default async function HomePage() {
           <PriceCard
             name="Toolcrib"
             price="$39"
-            detail="Crib / checkout — Week 3. Placeholder only."
+            detail="Crib inventory and checkout for small shops. Preview the product demo — SAMPLE data only."
+            href="/toolcrib-demo"
+            cta="See Toolcrib demo"
           />
           <PriceCard
             name="Pro"
@@ -96,7 +104,19 @@ export default async function HomePage() {
   );
 }
 
-function PriceCard({ name, price, detail }: { name: string; price: string; detail: string }) {
+function PriceCard({
+  name,
+  price,
+  detail,
+  href,
+  cta,
+}: {
+  name: string;
+  price: string;
+  detail: string;
+  href?: string;
+  cta?: string;
+}) {
   return (
     <div className="rounded-2xl border border-zinc-800 bg-zinc-900/80 p-5">
       <p className="text-sm uppercase tracking-wide text-zinc-500">{name}</p>
@@ -105,7 +125,14 @@ function PriceCard({ name, price, detail }: { name: string; price: string; detai
         <span className="text-base font-normal text-zinc-500">/mo</span>
       </p>
       <p className="mt-2 text-sm text-zinc-400">{detail}</p>
-      <p className="mt-4 text-xs text-zinc-500">Stripe checkout is Week 2. These are placeholders.</p>
+      {href && cta ? (
+        <Button asChild className="mt-4" size="sm">
+          <Link href={href}>{cta}</Link>
+        </Button>
+      ) : null}
+      <p className={href ? "mt-3 text-xs text-zinc-500" : "mt-4 text-xs text-zinc-500"}>
+        Stripe checkout is Week 2. These are placeholders.
+      </p>
     </div>
   );
 }

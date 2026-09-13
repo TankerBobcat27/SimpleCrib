@@ -6,7 +6,7 @@ export function BackupBanner() {
       <ShieldCheck className="mt-0.5 size-4 shrink-0 text-emerald-300" />
       <p>
         <span className="font-medium text-emerald-50">Your data is backed up daily; export anytime.</span>{" "}
-        Hosted Postgres snapshots plus a one-click CSV export. This is not a QMS, ERP, or crib system.
+        Hosted Postgres snapshots plus a one-click CSV export. Built for small shops.
       </p>
     </div>
   );

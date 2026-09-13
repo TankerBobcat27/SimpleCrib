@@ -18,7 +18,11 @@ export default async function SignupPage({
         <Link href="/" className="text-xs uppercase tracking-[0.2em] text-amber-300/80 hover:underline">{brand.productName}</Link>
         <h1 className="mt-2 text-3xl font-semibold">Start a shop</h1>
         <p className="mt-2 text-sm text-zinc-400">
-          Creates a new tenant and an admin user. Toolcrib is not part of Week 1.
+          Creates a new tenant and an admin user.{" "}
+          <Link href="/toolcrib-demo" className="text-amber-300 hover:underline">
+            See the Toolcrib demo
+          </Link>
+          .
         </p>
       </div>
       {params.error ? (

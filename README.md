@@ -4,7 +4,7 @@ Brand is **SimpleCrib** (simplecrib.com). UI strings come from `src/lib/brand.ts
 
 Multi-tenant gage / cal due board for US machine shops (1–40 people). One shared Next.js app + Postgres. Every query is scoped by `tenant_id`.
 
-**Positioning:** faster than Excel and the clipboard, with hosted daily backups. Not ERP, ProShop, CRIBWISE, or eQMS.
+**Positioning:** built for small US machine shops. Faster than Excel and the clipboard, with hosted daily backups.
 
 **Your data is backed up daily; export anytime.**
 
@@ -49,6 +49,7 @@ Open http://127.0.0.1:43147 and sign in with the admin demo user.
 ## Week 1 screens
 
 - Marketing + placeholder pricing: Calibration **$39** · Toolcrib **$39** · Pro both **$75** (Stripe is Week 2)
+- Public Toolcrib product demo: `/toolcrib-demo` (SAMPLE crib inventory + checkout preview)
 - Inventory list, due board, add, edit
 - Available / Out of service
 - Due filters: all, overdue, this week, due soon (30d), out of service
