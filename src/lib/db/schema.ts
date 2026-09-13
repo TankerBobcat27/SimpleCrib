@@ -93,6 +93,22 @@ export const gages = pgTable(
   ],
 );
 
+export const shopLocations = pgTable(
+  "shop_locations",
+  {
+    id: text("id").primaryKey(),
+    tenantId: text("tenant_id")
+      .notNull()
+      .references(() => tenants.id, { onDelete: "cascade" }),
+    name: text("name").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    unique("shop_locations_tenant_name").on(table.tenantId, table.name),
+    index("shop_locations_tenant_idx").on(table.tenantId),
+  ],
+);
+
 export const calHistory = pgTable(
   "cal_history",
   {
@@ -179,6 +195,7 @@ export const toolMoves = pgTable(
 export type Tenant = typeof tenants.$inferSelect;
 export type User = typeof user.$inferSelect;
 export type Gage = typeof gages.$inferSelect;
+export type ShopLocation = typeof shopLocations.$inferSelect;
 export type CalHistory = typeof calHistory.$inferSelect;
 export type Tool = typeof tools.$inferSelect;
 export type ToolLocation = typeof toolLocations.$inferSelect;

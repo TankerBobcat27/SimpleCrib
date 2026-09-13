@@ -8,7 +8,8 @@ import { auth } from "@/lib/auth";
 import { parseGageCsv } from "@/lib/csv";
 import { db, ensureSchema } from "@/lib/db";
 import { calHistory, gages, tenants } from "@/lib/db/schema";
-import { canEditGages, canImportExport, canUpdateStatus } from "@/lib/roles";
+import { DEFAULT_SHOP_LOCATION, rememberShopLocation, seedDefaultShopLocations } from "@/lib/locations";
+import { canEditGages, canImportExport, canMoveLocation, canUpdateStatus } from "@/lib/roles";
 import { requireShop } from "@/lib/tenant";
 
 function newId(prefix: string) {
@@ -79,6 +80,7 @@ export async function createShopAction(formData: FormData) {
 
   const tenantId = newId("ten");
   await db.insert(tenants).values({ id: tenantId, slug, name: shopName });
+  await seedDefaultShopLocations(tenantId);
 
   const result = await auth.api.signUpEmail({
     headers: await headers(),
@@ -112,7 +114,10 @@ export async function saveGageAction(formData: FormData) {
   const type = readString(formData, "type") || "Equipment";
   const manufacturer = readString(formData, "manufacturer") || null;
   const serial = readString(formData, "serial") || null;
-  const location = readString(formData, "location") || "Quality Lab";
+  const location = await rememberShopLocation(
+    shop.tenantId,
+    readString(formData, "newLocation") || readString(formData, "location") || DEFAULT_SHOP_LOCATION,
+  );
   const lastCal = readDate(formData, "lastCal");
   const nextDue = readDate(formData, "nextDue");
   const status = readString(formData, "status") === "out_of_service" ? "out_of_service" : "available";
@@ -200,6 +205,32 @@ export async function updateGageStatusAction(formData: FormData) {
   revalidatePath(`/t/${slug}/gages/${id}`);
 }
 
+export async function moveGageLocationAction(formData: FormData) {
+  const slug = readString(formData, "slug");
+  const shop = await requireShop(slug);
+  if (!canMoveLocation(shop.role)) {
+    redirect(`/t/${slug}?error=forbidden`);
+  }
+
+  const id = readString(formData, "id");
+  const requested = readString(formData, "newLocation") || readString(formData, "location");
+  if (!id || !requested || requested === "__new__") {
+    return;
+  }
+
+  const location = await rememberShopLocation(shop.tenantId, requested);
+
+  await db
+    .update(gages)
+    .set({ location, updatedAt: new Date() })
+    .where(and(eq(gages.id, id), eq(gages.tenantId, shop.tenantId)));
+
+  revalidatePath(`/t/${slug}`);
+  revalidatePath(`/t/${slug}/due`);
+  revalidatePath(`/t/${slug}/due-week`);
+  revalidatePath(`/t/${slug}/gages/${id}`);
+}
+
 export async function importGagesAction(formData: FormData) {
   const slug = readString(formData, "slug");
   const shop = await requireShop(slug);
@@ -230,7 +261,7 @@ export async function importGagesAction(formData: FormData) {
       type: row.type,
       manufacturer: row.manufacturer,
       serial: row.serial,
-      location: row.location,
+      location: await rememberShopLocation(shop.tenantId, row.location || DEFAULT_SHOP_LOCATION),
       lastCal: row.lastCal,
       nextDue: row.nextDue,
       status: row.status,

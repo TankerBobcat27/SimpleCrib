@@ -13,6 +13,10 @@ export function canUpdateStatus(role: Role) {
   return role === "admin" || role === "quality" || role === "operator";
 }
 
+export function canMoveLocation(role: Role) {
+  return canUpdateStatus(role);
+}
+
 export function canSeeDueWeekInbox(role: Role) {
   return role === "admin";
 }

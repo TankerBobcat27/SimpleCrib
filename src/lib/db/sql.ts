@@ -130,4 +130,29 @@ CREATE INDEX IF NOT EXISTS tools_tenant_type_idx ON tools (tenant_id, type);
 CREATE INDEX IF NOT EXISTS tool_locations_tenant_tool_idx ON tool_locations (tenant_id, tool_id);
 CREATE INDEX IF NOT EXISTS tool_locations_tenant_loc_idx ON tool_locations (tenant_id, location);
 CREATE INDEX IF NOT EXISTS tool_moves_tenant_tool_idx ON tool_moves (tenant_id, tool_id);
+
+CREATE TABLE IF NOT EXISTS shop_locations (
+  id TEXT PRIMARY KEY,
+  tenant_id TEXT NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+  name TEXT NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS shop_locations_tenant_name ON shop_locations (tenant_id, name);
+CREATE UNIQUE INDEX IF NOT EXISTS shop_locations_tenant_name_lower ON shop_locations (tenant_id, lower(name));
+CREATE INDEX IF NOT EXISTS shop_locations_tenant_idx ON shop_locations (tenant_id);
+
+INSERT INTO shop_locations (id, tenant_id, name)
+SELECT 'loc_' || md5(tenant_id || ':' || location), tenant_id, location
+FROM (
+  SELECT DISTINCT tenant_id, btrim(location) AS location
+  FROM gages
+  WHERE location IS NOT NULL AND btrim(location) <> ''
+) g
+ON CONFLICT (tenant_id, name) DO NOTHING;
+
+INSERT INTO shop_locations (id, tenant_id, name)
+SELECT 'loc_' || md5(id || ':Quality Lab'), id, 'Quality Lab'
+FROM tenants
+ON CONFLICT (tenant_id, name) DO NOTHING;
 `;

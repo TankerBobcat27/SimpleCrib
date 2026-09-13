@@ -4,6 +4,7 @@ import { auth } from "../src/lib/auth";
 import { db, ensureSchema, client } from "../src/lib/db";
 import { DEMO_SLUG, DEMO_TENANT_ID, SAMPLE_TOOLS } from "../src/lib/demo-inventory";
 import { calHistory, gages, tenants, toolLocations, tools } from "../src/lib/db/schema";
+import { seedDefaultShopLocations } from "../src/lib/locations";
 
 const DEMO_USERS = [
   {
@@ -286,6 +287,10 @@ async function main() {
   for (const demoUser of DEMO_USERS) {
     await upsertUser(demoUser);
   }
+
+  const demoLocations = [...new Set(SAMPLE_GAGES.map((gage) => gage.location))];
+  await seedDefaultShopLocations(DEMO_TENANT_ID, demoLocations);
+  console.log("Demo shop locations ready");
 
   const existingGages = await db.select().from(gages).where(eq(gages.tenantId, DEMO_TENANT_ID));
   if (existingGages.length === 0) {

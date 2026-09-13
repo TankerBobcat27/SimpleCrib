@@ -1,6 +1,6 @@
 import { GageBoard } from "@/components/gage-board";
 import { endOfWeek, startOfWeek, todayIso } from "@/lib/dates";
-import { listGages } from "@/lib/gages";
+import { listGages, listLocations } from "@/lib/gages";
 import { canSeeDueWeekInbox } from "@/lib/roles";
 import { requireShop } from "@/lib/tenant";
 import { redirect } from "next/navigation";
@@ -18,7 +18,10 @@ export default async function DueWeekPage({
     redirect(`/t/${slug}?error=forbidden`);
   }
 
-  const items = await listGages(shop.tenantId, { due: "this_week" });
+  const [items, locations] = await Promise.all([
+    listGages(shop.tenantId, { due: "this_week" }),
+    listLocations(shop.tenantId),
+  ]);
   const start = todayIso(startOfWeek());
   const end = todayIso(endOfWeek());
 
@@ -31,7 +34,7 @@ export default async function DueWeekPage({
           optional later; this in-app list is the Week 1 commit.
         </p>
       </div>
-      <GageBoard slug={slug} gages={items} role={shop.role} />
+      <GageBoard slug={slug} gages={items} role={shop.role} locations={locations} />
     </div>
   );
 }

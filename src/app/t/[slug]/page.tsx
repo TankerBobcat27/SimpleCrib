@@ -65,9 +65,10 @@ export default async function InventoryPage({
       </form>
       <p className="text-sm text-zinc-400">
         Showing <span className="text-zinc-100">{items.length}</span> of{" "}
-        <span className="text-zinc-100">{counts.all}</span> gages
+        <span className="text-zinc-100">{counts.all}</span> gages. Check out or check in from the
+        location dropdown on each gage — no need to open Edit.
       </p>
-      <GageBoard slug={slug} gages={items} role={shop.role} />
+      <GageBoard slug={slug} gages={items} role={shop.role} locations={locations} />
     </div>
   );
 }

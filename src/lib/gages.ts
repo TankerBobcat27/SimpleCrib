@@ -2,6 +2,7 @@ import { and, asc, eq, ilike, or, sql } from "drizzle-orm";
 import { db, ensureSchema } from "@/lib/db";
 import { calHistory, gages, type Gage } from "@/lib/db/schema";
 import { dueBucket, endOfWeek, todayIso, type DueBucket } from "@/lib/dates";
+import { listShopLocations } from "@/lib/locations";
 
 export const GAGE_TYPES = [
   "Equipment",
@@ -97,13 +98,7 @@ export async function listGageHistory(tenantId: string, gageId: string) {
 }
 
 export async function listLocations(tenantId: string) {
-  await ensureSchema();
-  const rows = await db
-    .selectDistinct({ location: gages.location })
-    .from(gages)
-    .where(scopedTenant(tenantId))
-    .orderBy(asc(gages.location));
-  return rows.map((row) => row.location).filter(Boolean);
+  return listShopLocations(tenantId);
 }
 
 export async function gageCounts(tenantId: string) {
