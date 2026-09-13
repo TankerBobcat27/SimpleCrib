@@ -32,19 +32,28 @@ export function ShopHeader({
       <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <p className="text-xs uppercase tracking-[0.18em] text-zinc-500">{productMark()}</p>
-            <h1 className="text-2xl font-semibold tracking-tight text-zinc-50">{productLineTitle()}</h1>
+            <Link href="/" className="group block">
+              <p className="text-xs uppercase tracking-[0.18em] text-zinc-500 group-hover:text-amber-300/80">{productMark()}</p>
+              <h1 className="text-2xl font-semibold tracking-tight text-zinc-50 group-hover:text-amber-100">{productLineTitle()}</h1>
+            </Link>
             <p className="text-sm text-zinc-400">
               {shopName} · signed in as {userName} ({role})
             </p>
           </div>
-          <form action={signOut}>
-            <Button type="submit" variant="ghost" size="sm">
-              Sign out
+          <div className="flex flex-wrap items-center gap-2">
+            <Button asChild variant="secondary" size="sm">
+              <Link href="/#pricing">Subscribe</Link>
             </Button>
-          </form>
+            <form action={signOut}>
+              <Button type="submit" variant="ghost" size="sm">
+                Sign out
+              </Button>
+            </form>
+          </div>
         </div>
         <nav className="flex flex-wrap gap-2">
+          <NavLink href="/">Home</NavLink>
+          <NavLink href="/#pricing">Subscribe</NavLink>
           <NavLink href={`/t/${slug}`}>Inventory</NavLink>
           <NavLink href={`/t/${slug}/due`}>Due board</NavLink>
           {canSeeDueWeekInbox(role) ? <NavLink href={`/t/${slug}/due-week`}>Due this week</NavLink> : null}

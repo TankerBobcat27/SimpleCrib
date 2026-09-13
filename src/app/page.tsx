@@ -32,7 +32,7 @@ export default async function HomePage() {
                 <Link href="/login">Log in</Link>
               </Button>
               <Button asChild>
-                <Link href="/signup">Start a shop</Link>
+                <Link href="/signup">Subscribe</Link>
               </Button>
             </>
           )}
@@ -55,14 +55,14 @@ export default async function HomePage() {
                 <Link href="/login">Open demo shop</Link>
               </Button>
               <Button asChild size="lg" variant="secondary">
-                <Link href="/signup">Create your shop</Link>
+                <Link href="/signup">Subscribe</Link>
               </Button>
             </div>
           </div>
           <BackupBanner />
         </section>
 
-        <section className="grid gap-4 md:grid-cols-3">
+        <section id="pricing" className="grid gap-4 md:grid-cols-3">
           <PriceCard
             name={brand.productLine}
             price="$39"
