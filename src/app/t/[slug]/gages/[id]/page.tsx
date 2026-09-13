@@ -1,9 +1,10 @@
 import { notFound } from "next/navigation";
 import { GageForm } from "@/components/gage-form";
+import { LocationMove } from "@/components/location-move";
 import { Badge } from "@/components/ui/badge";
 import { formatDate } from "@/lib/dates";
-import { getGage, listGageHistory } from "@/lib/gages";
-import { canEditGages } from "@/lib/roles";
+import { getGage, listGageHistory, listLocations } from "@/lib/gages";
+import { canEditGages, canMoveLocation } from "@/lib/roles";
 import { requireShop } from "@/lib/tenant";
 
 export const dynamic = 'force-dynamic';
@@ -17,7 +18,10 @@ export default async function GageDetailPage({
   const shop = await requireShop(slug);
   const gage = await getGage(shop.tenantId, id);
   if (!gage) notFound();
-  const history = await listGageHistory(shop.tenantId, gage.id);
+  const [history, locations] = await Promise.all([
+    listGageHistory(shop.tenantId, gage.id),
+    listLocations(shop.tenantId),
+  ]);
   const canEdit = canEditGages(shop.role);
 
   return (
@@ -27,11 +31,20 @@ export default async function GageDetailPage({
         <h2 className="text-2xl font-semibold">{canEdit ? "Edit gage" : "Gage"}</h2>
         <p className="text-sm text-zinc-400">
           {canEdit
-            ? "Operators can only flip Available / Out of service. Quality and admin can edit fields."
-            : "Read-only record. Use Available / Out of service on the board if you need to update status."}
+            ? "Check a gage out or in from the location control. Use the form for due dates, status, and other fields."
+            : "Read-only record. You can still move location and mark Available / Out of service on the board."}
         </p>
       </div>
-      <GageForm slug={slug} gage={gage} canEdit={canEdit} />
+      <LocationMove
+        key={`${gage.id}-${gage.location}`}
+        slug={slug}
+        id={gage.id}
+        location={gage.location}
+        locations={locations}
+        canEdit={canMoveLocation(shop.role)}
+        layout="panel"
+      />
+      <GageForm slug={slug} gage={gage} canEdit={canEdit} locations={locations} />
       <section className="rounded-xl border border-zinc-800 bg-zinc-900/70 p-5">
         <h3 className="text-sm font-semibold uppercase tracking-wide text-zinc-400">Calibration history</h3>
         {history.length === 0 ? (

@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { LocationMove } from "@/components/location-move";
 import { StatusToggle } from "@/components/status-toggle";
 import { dueBucket, dueLabel, formatDate } from "@/lib/dates";
 import type { Gage } from "@/lib/db/schema";
-import { canEditGages, canUpdateStatus, type Role } from "@/lib/roles";
+import { canEditGages, canMoveLocation, canUpdateStatus, type Role } from "@/lib/roles";
 
 function dueVariant(iso: string | null) {
   const bucket = dueBucket(iso);
@@ -18,10 +19,12 @@ export function GageBoard({
   slug,
   gages,
   role,
+  locations,
 }: {
   slug: string;
   gages: Gage[];
   role: Role;
+  locations: string[];
 }) {
   if (gages.length === 0) {
     return (
@@ -59,7 +62,16 @@ export function GageBoard({
             <div className="mt-3 flex flex-wrap items-center gap-2 text-sm">
               <Badge variant={dueVariant(gage.nextDue)}>{dueLabel(gage.nextDue)}</Badge>
               <span className="text-zinc-400">Due {formatDate(gage.nextDue)}</span>
-              <span className="text-zinc-500">· {gage.location}</span>
+            </div>
+            <div className="mt-4">
+              <LocationMove
+                key={`${gage.id}-${gage.location}`}
+                slug={slug}
+                id={gage.id}
+                location={gage.location}
+                locations={locations}
+                canEdit={canMoveLocation(role)}
+              />
             </div>
             <div className="mt-4 flex flex-wrap gap-2">
               {canEditGages(role) ? (
@@ -104,7 +116,16 @@ export function GageBoard({
                   <Badge variant={dueVariant(gage.nextDue)}>{dueLabel(gage.nextDue)}</Badge>
                 </td>
                 <td className="px-4 py-3 tabular-nums text-zinc-200">{formatDate(gage.nextDue)}</td>
-                <td className="px-4 py-3 text-zinc-300">{gage.location}</td>
+                <td className="px-4 py-3">
+                  <LocationMove
+                    key={`${gage.id}-${gage.location}`}
+                    slug={slug}
+                    id={gage.id}
+                    location={gage.location}
+                    locations={locations}
+                    canEdit={canMoveLocation(role)}
+                  />
+                </td>
                 <td className="px-4 py-3">
                   <Badge variant={gage.status === "out_of_service" ? "out" : "ok"}>
                     {gage.status === "out_of_service" ? "Out of service" : "Available"}

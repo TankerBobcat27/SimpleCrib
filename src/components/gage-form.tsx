@@ -5,6 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import type { Gage } from "@/lib/db/schema";
 import { GAGE_TYPES } from "@/lib/gages";
+import { DEFAULT_SHOP_LOCATION } from "@/lib/locations";
 import Link from "next/link";
 
 const selectClass =
@@ -14,10 +15,12 @@ export function GageForm({
   slug,
   gage,
   canEdit,
+  locations = [],
 }: {
   slug: string;
   gage?: Gage;
   canEdit: boolean;
+  locations?: string[];
 }) {
   return (
     <form action={saveGageAction} className="grid gap-6">
@@ -39,7 +42,30 @@ export function GageForm({
               ))}
             </select>
           </div>
-          <Field label="Location" name="location" defaultValue={gage?.location ?? "Quality Lab"} disabled={!canEdit} />
+          <div className="grid gap-2">
+            <Label htmlFor="location">Location</Label>
+            <select
+              id="location"
+              name="location"
+              defaultValue={gage?.location ?? DEFAULT_SHOP_LOCATION}
+              className={selectClass}
+              disabled={!canEdit}
+            >
+              {(locations.includes(gage?.location ?? DEFAULT_SHOP_LOCATION)
+                ? locations
+                : [gage?.location ?? DEFAULT_SHOP_LOCATION, ...locations]
+              )
+                .filter(Boolean)
+                .map((location) => (
+                  <option key={location} value={location}>
+                    {location}
+                  </option>
+                ))}
+            </select>
+            {canEdit ? (
+              <Field label="Or add a new location" name="newLocation" placeholder="Leave blank to use the dropdown" />
+            ) : null}
+          </div>
         </div>
       </section>
 
@@ -107,6 +133,7 @@ function Field({
   type = "text",
   required,
   disabled,
+  placeholder,
 }: {
   label: string;
   name: string;
@@ -114,6 +141,7 @@ function Field({
   type?: string;
   required?: boolean;
   disabled?: boolean;
+  placeholder?: string;
 }) {
   return (
     <div className="grid gap-2">
@@ -125,6 +153,7 @@ function Field({
         defaultValue={defaultValue}
         required={required}
         disabled={disabled}
+        placeholder={placeholder}
       />
     </div>
   );
