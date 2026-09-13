@@ -23,9 +23,14 @@ export default async function HomePage() {
         </div>
         <div className="flex gap-2">
           {user ? (
-            <Button asChild>
-              <Link href={`/t/${user.tenantSlug}`}>Open shop</Link>
-            </Button>
+            <>
+              <Button asChild variant="secondary">
+                <Link href={`/t/${user.tenantSlug}/toolcrib`}>Open Toolcrib</Link>
+              </Button>
+              <Button asChild>
+                <Link href={`/t/${user.tenantSlug}`}>Open shop</Link>
+              </Button>
+            </>
           ) : (
             <>
               <Button asChild variant="secondary">
@@ -77,9 +82,9 @@ export default async function HomePage() {
           <PriceCard
             name="Toolcrib"
             price="$39"
-            detail="Crib inventory and checkout for small shops. Preview the product demo — SAMPLE data only."
-            href="/toolcrib-demo"
-            cta="See Toolcrib demo"
+            detail="Live crib inventory, qty checkout, and return. Same tool can sit in up to 5 locations."
+            href="/login?next=/t/demo/toolcrib"
+            cta="Open live Toolcrib"
           />
           <PriceCard
             name="Pro"
@@ -89,14 +94,14 @@ export default async function HomePage() {
         </section>
 
         <section className="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-6">
-          <h2 className="text-xl font-semibold">What Week 1 ships</h2>
+          <h2 className="text-xl font-semibold">What ships now</h2>
           <ul className="mt-4 grid gap-2 text-sm text-zinc-300 sm:grid-cols-2">
             <li>Path-based tenant: <code className="text-amber-200">/t/demo</code></li>
-            <li>Roles: admin, quality, operator (status only)</li>
-            <li>Due filters + admin “due this week” inbox</li>
-            <li>Available / Out of service on the shop floor</li>
-            <li>CSV import and export</li>
-            <li>SAMPLE gages only — no customer live inventory</li>
+            <li>Calibration due board + Toolcrib inventory</li>
+            <li>Toolcrib qty checkout and return between locations</li>
+            <li>Roles: admin, quality, operator</li>
+            <li>CSV import and export for gages</li>
+            <li>SAMPLE demo inventory — not a customer crib</li>
           </ul>
         </section>
       </main>

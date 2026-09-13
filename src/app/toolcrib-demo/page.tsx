@@ -25,7 +25,7 @@ export default function ToolcribDemoPage() {
             <Link href="/">Home</Link>
           </Button>
           <Button asChild variant="secondary">
-            <Link href="/login">Open demo shop</Link>
+            <Link href="/login?next=/t/demo/toolcrib">Open live Toolcrib</Link>
           </Button>
           <Button asChild>
             <Link href="/signup">Subscribe</Link>
@@ -37,8 +37,11 @@ export default function ToolcribDemoPage() {
         <section className="max-w-2xl">
           <p className="text-sm font-medium text-amber-200">Public product preview</p>
           <p className="mt-2 text-lg text-zinc-400">
-            Crib inventory, location chips, search, and a checkout preview — so you can see Toolcrib before
-            the live product ships. Calibration due-board lives in the demo shop.
+            Public SAMPLE preview below. The live shop at{" "}
+            <Link href="/login?next=/t/demo/toolcrib" className="text-amber-300 hover:underline">
+              /t/demo/toolcrib
+            </Link>{" "}
+            saves checkout and return — quantity splits across location chips.
           </p>
         </section>
         <ToolcribDemoBoard />

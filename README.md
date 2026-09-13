@@ -1,4 +1,4 @@
-# SimpleCrib — Calibration Tracker (Week 1)
+# SimpleCrib — Calibration + Toolcrib
 
 Brand is **SimpleCrib** (simplecrib.com). UI strings come from `src/lib/brand.ts`.
 
@@ -18,7 +18,7 @@ This repo does **not** touch Layke here.now apps (Toolcrib, Calibration, Queue, 
 | Quality | `quality@demo.shopcal.test` | `DemoQuality!2026` |
 | Operator (read + status) | `operator@demo.shopcal.test` | `DemoOperator!2026` |
 
-Tenant path: `/t/demo` · shop name: **Midwest Precision (Demo)**
+Tenant path: `/t/demo` · Toolcrib: `/t/demo/toolcrib` · shop name: **Midwest Precision (Demo)**
 
 Local URL: http://127.0.0.1:43147
 
@@ -49,7 +49,8 @@ Open http://127.0.0.1:43147 and sign in with the admin demo user.
 ## Week 1 screens
 
 - Marketing + placeholder pricing: Calibration **$39** · Toolcrib **$39** · Pro both **$75** (Stripe is Week 2)
-- Public Toolcrib product demo: `/toolcrib-demo` (SAMPLE crib inventory + checkout preview)
+- Live Toolcrib: `/t/[slug]/toolcrib` — qty checkout + return, location chips, SAMPLE demo tools
+- Public Toolcrib SAMPLE preview: `/toolcrib-demo`
 - Inventory list, due board, add, edit
 - Available / Out of service
 - Due filters: all, overdue, this week, due soon (30d), out of service

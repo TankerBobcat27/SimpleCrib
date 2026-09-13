@@ -89,4 +89,45 @@ CREATE INDEX IF NOT EXISTS gages_tenant_due_idx ON gages (tenant_id, next_due);
 CREATE INDEX IF NOT EXISTS gages_tenant_status_idx ON gages (tenant_id, status);
 CREATE INDEX IF NOT EXISTS cal_history_tenant_gage_idx ON cal_history (tenant_id, gage_id);
 CREATE INDEX IF NOT EXISTS user_tenant_idx ON "user" (tenant_id);
+
+CREATE TABLE IF NOT EXISTS tools (
+  id TEXT PRIMARY KEY,
+  tenant_id TEXT NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+  tool_number TEXT NOT NULL,
+  name TEXT NOT NULL,
+  type TEXT NOT NULL,
+  manufacturer TEXT,
+  notes TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  UNIQUE (tenant_id, tool_number)
+);
+
+CREATE TABLE IF NOT EXISTS tool_locations (
+  id TEXT PRIMARY KEY,
+  tenant_id TEXT NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+  tool_id TEXT NOT NULL REFERENCES tools(id) ON DELETE CASCADE,
+  location TEXT NOT NULL,
+  quantity INTEGER NOT NULL DEFAULT 0 CHECK (quantity >= 0),
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  UNIQUE (tenant_id, tool_id, location)
+);
+
+CREATE TABLE IF NOT EXISTS tool_moves (
+  id TEXT PRIMARY KEY,
+  tenant_id TEXT NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+  tool_id TEXT NOT NULL REFERENCES tools(id) ON DELETE CASCADE,
+  intent TEXT NOT NULL CHECK (intent IN ('checkout', 'checkin')),
+  from_location TEXT NOT NULL,
+  to_location TEXT NOT NULL,
+  quantity INTEGER NOT NULL CHECK (quantity > 0),
+  performed_by TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS tools_tenant_type_idx ON tools (tenant_id, type);
+CREATE INDEX IF NOT EXISTS tool_locations_tenant_tool_idx ON tool_locations (tenant_id, tool_id);
+CREATE INDEX IF NOT EXISTS tool_locations_tenant_loc_idx ON tool_locations (tenant_id, location);
+CREATE INDEX IF NOT EXISTS tool_moves_tenant_tool_idx ON tool_moves (tenant_id, tool_id);
 `;
