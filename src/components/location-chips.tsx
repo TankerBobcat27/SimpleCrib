@@ -1,5 +1,4 @@
-import type { LocationSplit } from "@/lib/tools";
-import { MAX_TOOL_LOCATIONS } from "@/lib/tools";
+import { MAX_TOOL_LOCATIONS, type LocationSplit } from "@/lib/tool-core";
 import { cn } from "@/lib/utils";
 
 export function LocationChips({

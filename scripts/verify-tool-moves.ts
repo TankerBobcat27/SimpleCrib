@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { applyLocationMove } from "../src/lib/tools";
+import { applyLocationMove } from "../src/lib/tool-core";
 
 const start = [{ name: "Crib A", qty: 14 }];
 const checkedOut = applyLocationMove(start, "Crib A", "Haas VF-2", 2);

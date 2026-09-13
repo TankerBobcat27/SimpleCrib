@@ -4,7 +4,8 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { canEditTools, canMoveTools } from "@/lib/roles";
 import { requireShop } from "@/lib/tenant";
-import { createTool, DEFAULT_CRIB_LOCATION, moveToolQuantity, type MoveIntent } from "@/lib/tools";
+import { DEFAULT_CRIB_LOCATION, type MoveIntent } from "@/lib/tool-core";
+import { createTool, moveToolQuantity } from "@/lib/tools";
 
 function readString(formData: FormData, key: string) {
   const value = formData.get(key);

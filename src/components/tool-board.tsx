@@ -7,7 +7,7 @@ import { ToolMoveForm } from "@/components/tool-move-form";
 import { Button } from "@/components/ui/button";
 import type { Role } from "@/lib/roles";
 import { canMoveTools } from "@/lib/roles";
-import type { MoveIntent, ToolWithLocations } from "@/lib/tools";
+import type { MoveIntent, ToolCard } from "@/lib/tool-core";
 
 export function ToolBoard({
   slug,
@@ -17,7 +17,7 @@ export function ToolBoard({
   returnTo,
 }: {
   slug: string;
-  tools: ToolWithLocations[];
+  tools: ToolCard[];
   destinations: string[];
   role: Role;
   returnTo: string;
@@ -128,7 +128,7 @@ export function ToolBoard({
   );
 }
 
-function ToolHeader({ slug, tool }: { slug: string; tool: ToolWithLocations }) {
+function ToolHeader({ slug, tool }: { slug: string; tool: ToolCard }) {
   return (
     <div>
       <p className="font-mono text-xs text-zinc-400">{tool.toolNumber}</p>
@@ -149,7 +149,7 @@ function MoveActions({
   setOpen,
   compact,
 }: {
-  tool: ToolWithLocations;
+  tool: ToolCard;
   setOpen: (value: { id: string; intent: MoveIntent } | null) => void;
   compact?: boolean;
 }) {

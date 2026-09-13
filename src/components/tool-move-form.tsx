@@ -12,7 +12,7 @@ import {
   defaultCheckoutSource,
   type LocationSplit,
   type MoveIntent,
-} from "@/lib/tools";
+} from "@/lib/tool-core";
 
 function SubmitButton({ intent }: { intent: MoveIntent }) {
   const { pending } = useFormStatus();
