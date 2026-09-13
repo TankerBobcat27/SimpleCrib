@@ -39,34 +39,41 @@ export function ToolBoard({
   return (
     <>
       {openTool && open ? (
-        <div className="rounded-2xl border border-amber-400/50 bg-zinc-900 p-5">
-          <div className="grid gap-3">
-            <div>
-              <p className="text-xs uppercase tracking-[0.18em] text-amber-300/80">
-                {open.intent === "checkin" ? "Return / check in" : "Check out"}
-              </p>
-              <h2 className="mt-1 text-xl font-semibold">
-                {openTool.toolNumber} · {openTool.name}
-              </h2>
-              <p className="mt-1 text-sm text-zinc-400">
-                {open.intent === "checkin"
-                  ? "Move quantity from a floor location back to the crib (or another location)."
-                  : "Enter how many to take and where they are going. Source quantity drops; destination chip is created or updated."}
-              </p>
-            </div>
-            <LocationChips locations={openTool.locations} />
-            <ToolMoveForm
-              slug={slug}
-              toolId={openTool.id}
-              locations={openTool.locations}
-              destinations={destinations}
-              intent={open.intent}
-              returnTo={returnTo}
-            />
-            <div>
-              <Button type="button" variant="secondary" size="sm" onClick={() => setOpen(null)}>
-                Cancel
-              </Button>
+        <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-zinc-950/80 p-4 pt-16">
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="tool-move-title"
+            className="w-full max-w-2xl rounded-2xl border border-amber-400/50 bg-zinc-900 p-5 shadow-2xl"
+          >
+            <div className="grid gap-3">
+              <div>
+                <p className="text-xs uppercase tracking-[0.18em] text-amber-300/80">
+                  {open.intent === "checkin" ? "Return / check in" : "Check out"}
+                </p>
+                <h2 id="tool-move-title" className="mt-1 text-xl font-semibold">
+                  {openTool.toolNumber} · {openTool.name}
+                </h2>
+                <p className="mt-1 text-sm text-zinc-400">
+                  {open.intent === "checkin"
+                    ? "Move quantity from a floor location back to the crib (or another location)."
+                    : "Enter how many to take and where they are going. Source quantity drops; destination chip is created or updated."}
+                </p>
+              </div>
+              <LocationChips locations={openTool.locations} />
+              <ToolMoveForm
+                slug={slug}
+                toolId={openTool.id}
+                locations={openTool.locations}
+                destinations={destinations}
+                intent={open.intent}
+                returnTo={returnTo}
+              />
+              <div>
+                <Button type="button" variant="secondary" size="sm" onClick={() => setOpen(null)}>
+                  Cancel
+                </Button>
+              </div>
             </div>
           </div>
         </div>
