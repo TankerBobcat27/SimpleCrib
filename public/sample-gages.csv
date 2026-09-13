@@ -1,0 +1,3 @@
+shop_id,name,type,manufacturer,serial,location,last_cal,next_due,status,notes
+SHOP-MIC-99,0-1 extra micrometer,Micrometer,Mitutoyo,MM-DEMO-99,Quality Lab,2026-01-15,2027-01-15,available,SAMPLE import row
+SHOP-THD-99,10-32 UNF-2B plug,Thread gage,Vermont Gage,VG-1032,Quality Lab,2026-03-01,2026-09-14,available,SAMPLE import row
